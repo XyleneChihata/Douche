@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login - Douche Salon</title>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="MainSupport.css">
+    <!-- The java script -->
+    <style>
+body{
+    background-image: url(bgback.jpg);
+    background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+}
+* {
+  box-sizing: initial !important;
+}
+    </style>
+</head>
+    <body>
+        <!-- floating button -->
+        <div class="floating-button">
+            <a href="index.html"><img src="Titlenobg.png" alt="Floating Image Button"></a>
+        </div>
+        <!-- the content of login box -->
+        <div class="container5">
+            <div class="login-box">
+            <img src="Titlenobg.png" alt="Douche Salon">
+            <br>
+            <h2>Login</h2>
+                <form id="loginForm">
+                    <label for="loginUsername">Username:<div id="loginStatus"></div>
+                    </label>
+                    <input type="text" id="loginUsername" required>
+                    <br>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" required>
+                    <br>
+                    <button type="submit">Login</button>
+                </form>
+                <p>Don't have Account? <a href="RegisterPage.html">Sign up now</a></p>
+            </div>
+            </div>
+          <script>
+const loginForm = document.getElementById('loginForm');
+const loginStatus = document.getElementById('loginStatus');
+
+loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const usernameInput = document.getElementById('loginUsername').value;
+            const passwordInput = document.getElementById('loginPassword').value;
+    
+//the cookie delivery hotline :)
+function SessionDataSent() {
+
+//uid generation for auth
+function generateUID(length = 15) {
+const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const charactersLength = characters.length;
+let uid = '';
+
+for (let i = 0; i < length; i++) {
+    uid += characters.charAt(Math.floor(Math.random() * charactersLength));
+}
+
+return uid;
+}
+
+const uid = generateUID();
+
+// The furnace of our cookie maker
+function setCookie(name, value, daysToExpire) {
+const jsonValue = JSON.stringify(value);
+const expirationDate = new Date();
+expirationDate.setTime(expirationDate.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+const expires = "expires=" + expirationDate.toUTCString();
+const secureAttribute = window.location.protocol === "https:" ? ";Secure" : "";
+
+document.cookie = name + "=" + jsonValue + ";" + expires + ";path=/" + secureAttribute;
+}
+
+const Hotcookies = {
+_id: usernameInput,
+sessionid: uid
+};
+
+// The naming of the owner of the cookie along with the barcode and feeding the browser
+setCookie('SessionKey', Hotcookies, 3);
+
+// sending the cookie tracker information to database
+fetch('/sessionKey', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(Hotcookies)
+    })
+};
+
+
+        // Send a GET request to your server
+        fetch(`/login/${usernameInput}?password=${passwordInput}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+        .then(data => {
+            if (data.perms === 'user') {
+                loginStatus.textContent = "Login Successful!";
+                SessionDataSent();
+                alert('Login Successful');
+                window.location.href = 'index.html';
+            } else if (data.perms === 'admin') {
+                SessionDataSent();
+                alert('Welcome Admin');
+                window.location.href = 'Admin Page.html';
+            } else if (data.perms === 'stylist') {
+                SessionDataSent();
+                alert('Welcome Stylist');
+                window.location.href = 'StylistPersonal.html';
+            } else {
+                loginStatus.textContent = "Unexpected response from the server.";
+                console.log('Unexpected response from the server.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            loginStatus.textContent = "Incorrect Username/Password.";
+        });
+    }); 
+
+          </script>
+    </body>
+
+    </html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Stylist Personal - Douche Salon</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="MainSupport.css">
+    </head>
+    <div class="navigation">
+        <nav>
+            <h2 class="title"><img src="Titlenobg.png" alt="image" width="280"></image></h2>
+            <ul>
+            <div style="border: 1px solid black; border-radius: 5px;">
+                <li id="Staff"><a href="StylistPersonal.html">Schedule</a></li>
+            </div>
+        </ul>
+        <button id="logout" type="button" onclick="logoutUser(); window.location.href='index.html'">Logout</button></nav>
+        </div>
+        <script src="MainSupport.js"></script>
+    <script>
+      
+      function serveridentity(){
+      //intrusive private sites
+      const SessionKeyValue = getCookieValues('SessionKey');
+      
+            if (!SessionKeyValue || !SessionKeyValue._id) {
+            window.location.href='LoginPage.html'
+        // Handle the error, redirect the user, or perform other actions as needed
+            } else {
+              fetch(`/sessionKey/${SessionKeyValue._id}`, {
+                      method: 'GET',
+                      headers: {
+                          'Content-Type': 'application/json'
+                      },
+                  })
+                  .then(response => {
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  return response.json();
+              })  
+                  .then(data => {
+                      if (data.error) {
+                        loginStatus.textContent = data.error;
+                      } else {
+                          //logged user!!!
+                          document.getElementById('logout').classList.remove('hidden');
+                      }
+                  })
+                  .catch(error => {
+                        document.getElementById('logout').classList.add('hidden');
+                  });
+                };
+            };
+window.addEventListener('pageshow', function(event) {
+if (event.persisted) {//your trusty back button catcher
+serveridentity();
+}});
+            serveridentity();
+          setInterval(serveridentity, 300000);      // Example function to simulate user logout
+      function logoutUser() {
+        const cookieName = "SessionKey";
+        document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        // Hide the profile and logout links
+        document.getElementById('logout').classList.add('hidden');
+        window.location.href='index.html'
+      }
+    </script>
+    <div class="floating-button">
+        <div id="clock">00:00:00 AM</div>
+    </div>
+    <body>
+        <style>
+              /*This is done for the overlapping rules on the css,its specifically fitted for this page*/
+            .item4 img{
+                border: 0px !important;
+                height: auto;
+                width: 300px;
+            }
+            /*Calendar */
+
+         #calendar-container {
+            width: 900px;
+            margin: 0 auto;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            gap: 10px;
+            text-align: center;
+        }
+
+        .day {
+            padding: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            position: relative;
+            font-size: 30px;
+        }
+
+        .today {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .days-container {
+            display: grid;
+            width: 900px;
+            grid-template-columns: repeat(11, 1fr);
+            text-align: center;
+            justify-content: space-around;
+            margin-top: 50px;
+            gap: 0px;
+        }
+
+        .dayN {
+            font-size: 10px;
+            text-align: center;
+            padding: 10px;
+        }
+        </style>
+        <div class="container">
+            <div class="item">
+                <h5>Schedule for this week:</h5> <h2 id="month-name"></h2>
+                <br>
+                <div id="calendar-container">
+                    <div class="days-container" id="days-container"></div>
+                    <div class="calendar" id="calendar"></div>
+                </div>
+            </div>
+            </div>
+            <div class="container">
+                <div class="item">
+                    <h3>Activity</h3>
+                </div>
+            </div>
+            <footer>
+            </footer>
+            <script>
+                // clock
+// Calling showTime function at every second
+setInterval(showTime, 1000);
+
+// Defining showTime funcion
+function showTime() {
+	// Getting current time and date
+	let time = new Date();
+	let hour = time.getHours();
+	let min = time.getMinutes();
+	let sec = time.getSeconds();
+	am_pm = "AM";
+
+	// Setting time for 12 Hrs format
+	if (hour >= 12) {
+		if (hour > 12) hour -= 12;
+		am_pm = "PM";
+	} else if (hour == 0) {
+		hr = 12;
+		am_pm = "AM";
+	}
+
+	hour =
+		hour < 10 ? "0" + hour : hour;
+	min = min < 10 ? "0" + min : min;
+	sec = sec < 10 ? "0" + sec : sec;
+
+	let currentTime =
+		hour +
+		":" +
+		min +
+		":" +
+		sec +
+        " " +
+		am_pm;
+
+	// Displaying the time
+	document.getElementById("clock").innerHTML = currentTime;
+}
+
+showTime();
+                // Get current date
+const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+        function createCalendar() {
+            const calendarContainer = document.getElementById('calendar');
+            calendarContainer.innerHTML = '';
+
+            const monthNameElement = document.getElementById('month-name');
+            calendarContainer.innerHTML = '';
+
+            // Set the date for the current month
+            const currentMonth = today.getMonth();
+            monthNameElement.textContent = monthNames[currentMonth];
+
+            // Generate 9 days (3 days behind and 5 days ahead)
+            for (let i = -3; i <= 7; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+
+                // Set the date for the current day element
+                const currentDate = new Date(today);
+                currentDate.setDate(today.getDate() + i);
+
+                // Add the "today" class to the current day element
+                if (currentDate.getTime() === today.getTime()) {
+                    dayElement.classList.add('today');
+                }
+
+                // Display the date
+                dayElement.textContent = currentDate.getDate();
+                calendarContainer.appendChild(dayElement);
+            }
+        }
+
+        // Initial calendar creation
+        createCalendar(); 
+
+        function displayWeekDays() {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const today = new Date();
+    const daysContainer = document.getElementById('days-container');
+
+    // Get the current day index
+    let currentDayIndex = today.getDay();
+
+    // Display 3 days behind today and the days of the week
+    for (let i = -3; i <= 7; i++) {
+        const dayIndex = (currentDayIndex + i + 7) % 7;
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('dayN'); // Use consistent class name
+
+        // Highlight today
+        if (i === 0) {
+            dayElement.style.fontWeight = 'bold';
+        }
+
+        // Display the day name
+        dayElement.textContent = daysOfWeek[dayIndex];
+        daysContainer.appendChild(dayElement);
+    }
+}
+
+
+        // Call the function to display the week's days
+        displayWeekDays();
+            </script>
+    </body>
+    </html>

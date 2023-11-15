@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Admin - Douche Salon</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="MainSupport.css">
+</head>
+
+<body>
+    <style>
+        nav {
+            background-image: linear-gradient(to right, #707070, #4a4a4a, #000000) !important;
+        }
+
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(37, 36, 36, 0)), url(bgadmin.jpg) !important;
+        }
+
+        nav ul li a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+        }
+
+        footer {
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 5px;
+            padding-left: 2%;
+            padding-right: 3%;
+            background-image: linear-gradient(to right, #707070, #4a4a4a, #000000) !important;
+            opacity: 0.8;
+            height: 30px;
+        }
+    </style>
+    <header>
+        <div class="navigation">
+            <nav>
+                <h2 class="title"><img src="Titlenobg.png" alt="image" width="280"></image>
+                </h2>
+                <ul>
+                    <li><a href="Admin Page.html">Schedule</a></li>
+                    <div style="border: 1px solid rgb(255, 255, 255); border-radius: 5px;">
+                        <li><a href="Admin Page Userdata.html">Userdata</a></li>
+                    </div>
+                    <li><a href="Admin Page Scheduling.html">Scheduling</a></li>
+                    <li><a href="Admin Page Inventory.html">Inventory</a></li>
+                </ul>
+                <button id="logout" type="button" onclick="logoutUser();">Logout</button>
+            </nav>
+        </div>
+    </header>
+    <script>
+        function getCookieValues(name) {
+            const cookieString = decodeURIComponent(document.cookie);
+            const cookies = cookieString.split('; ');
+
+            for (const cookie of cookies) {
+                const [cookieName, cookieValue] = cookie.split('=');
+                if (cookieName === name) {
+                    // Parse the JSON string back to an object
+                    return JSON.parse(cookieValue);
+                }
+            }
+
+            // Return null or handle if the cookie is not found
+            return null;
+        }
+
+        function serveridentity() {
+            //intrusive private sites
+            const SessionKeyValue = getCookieValues('SessionKey');
+
+            if (!SessionKeyValue || !SessionKeyValue._id) {
+                window.location.href = 'LoginPage.html'
+                // Handle the error, redirect the user, or perform other actions as needed
+            } else {
+                fetch(`/sessionKey/${SessionKeyValue._id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.error) {
+                            loginStatus.textContent = data.error;
+                        } else {
+                            //logged user!!!
+                            document.getElementById('logout').classList.remove('hidden');
+                        }
+                    })
+                    .catch(error => {
+                        document.getElementById('logout').classList.add('hidden');
+                    });
+            };
+        };
+        window.addEventListener('pageshow', function (event) {
+            if (event.persisted) {//your trusty back button catcher
+                serveridentity();
+            }
+        });
+        serveridentity();
+        setInterval(serveridentity, 300000);      // Example function to simulate user logout
+        function logoutUser() {
+            const cookieName = "SessionKey";
+            document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            // Hide the profile and logout links
+            document.getElementById('logout').classList.add('hidden');
+            window.location.href = 'index.html'
+        }
+
+        let isAdmin = false;
+        let isStylist = false;
+
+        function toggleVisibility(element) {
+            const UserDB = document.getElementById('UserDatabase');
+            const AdminDB = document.getElementById('AdminDatabase');
+            const StylistDB = document.getElementById('StylistDatabase');
+            const element1 = document.getElementById('UserButton');
+            const element2 = document.getElementById('AdminButton');
+            const element3 = document.getElementById('StylistButton');
+
+            if (element === 'User' && !isUser) {
+                UserDB.classList.remove('hidden');
+                AdminDB.classList.add('hidden');
+                StylistDB.classList.add('hidden');
+                element1.style.backgroundColor = 'gray';
+                element2.style.backgroundColor = 'rgb(219, 219, 226)';
+                element3.style.backgroundColor = 'rgb(219, 219, 226)';
+                isUser = true;
+                isAdmin = false;
+                isStylist = false;
+            } else if (element === 'Admin' && !isAdmin) {
+                UserDB.classList.add('hidden');
+                AdminDB.classList.remove('hidden');
+                StylistDB.classList.add('hidden');
+                element1.style.backgroundColor = 'rgb(219, 219, 226)';
+                element2.style.backgroundColor = 'gray';
+                element3.style.backgroundColor = 'rgb(219, 219, 226)';
+                isUser = false;
+                isAdmin = true;
+                isStylist = false;
+            } else if (element === 'Stylist' && !isStylist) {
+                UserDB.classList.add('hidden');
+                AdminDB.classList.add('hidden');
+                StylistDB.classList.remove('hidden');
+                element1.style.backgroundColor = 'rgb(219, 219, 226)';
+                element2.style.backgroundColor = 'rgb(219, 219, 226)';
+                element3.style.backgroundColor = 'gray';
+                isUser = false;
+                isAdmin = false;
+                isStylist = true;
+            }
+        }
+    </script>
+
+    <body>
+        <div class="containerHeader">
+            <button id="UserButton" style="background: gray;" class="togglebutton"
+                onclick="toggleVisibility('User'); closePopup();">User view</button>
+            <button id="AdminButton" class="togglebutton" onclick="toggleVisibility('Admin'); closePopup();">Admin
+                view</button>
+            <button id="StylistButton" class="togglebutton" onclick="toggleVisibility('Stylist'); closePopup();">Stylist
+                view</button>
+
+        </div>
+        <div id="UserDatabase">
+            <div class="containerHeader">
+                <h2>User Database:</h2>
+            </div>
+            <div class="tableContainer">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="ath">Username</th>
+                            <th class="ath">Name</th>
+                            <th class="ath">Email</th>
+                            <th class="ath">Gender</th>
+                            <th class="ath">Contact</th>
+                            <th class="ath" style="text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="AdminDatabase" class="hidden">
+            <div class="containerHeader">
+                <h2>Admin Database:</h2>
+            </div>
+            <div class="tableContainer">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="bth">Username</th>
+                            <th class="bth">Name</th>
+                            <th class="bth">Email</th>
+                            <th class="bth">Gender</th>
+                            <th class="bth">Contact</th>
+                            <th class="bth" style="text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody2"></tbody>
+                </table>
+            </div>
+        </div>
+        <div id="StylistDatabase" class="hidden">
+            <div class="containerHeader">
+                <h2>Stylist Database:</h2>
+            </div>
+            <div class="tableContainer">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="cth">Username</th>
+                            <th class="cth">Name</th>
+                            <th class="cth">Email</th>
+                            <th class="cth">Gender</th>
+                            <th class="cth">Contact</th>
+                            <th class="cth" style="text-align: center;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody3"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="popupAdmin" id="popup">
+            <div class="popup-content">
+                <div id="popupContentContainer">
+
+                    <div class="independent-container">
+                        <button type="button" class="popupbuttonadmin" onclick="closePopup();">Return</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container2">
+            <div class="item4">
+            </div>
+        </div>
+        <footer>
+        </footer>
+        <script>
+            setInterval(UpdateQueue, 1000);
+            function UpdateQueue() {
+                fetch('/usersDB')
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody = document.getElementById('tableBody');
+                        // Clear existing rows from the table
+                        tableBody.innerHTML = '';
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+                            const cell1 = document.createElement('td');
+                            const cell2 = document.createElement('td');
+                            const cell3 = document.createElement('td');
+                            const cell4 = document.createElement('td');
+                            const cell5 = document.createElement('td');
+
+                            cell1.textContent = item._id;
+                            cell2.textContent = item.name;
+                            cell3.textContent = item.email;
+                            cell4.textContent = item.gender;
+                            cell5.textContent = item.contact;
+
+                            const actionCell = document.createElement('td');
+                            const actionButton = document.createElement('button');
+                            actionButton.textContent = 'Edit';
+                            actionButton.addEventListener('click', function () {
+                                showPopup(item._id);
+                            });
+                            actionCell.appendChild(actionButton);
+
+                            row.appendChild(cell1);
+                            row.appendChild(cell2);
+                            row.appendChild(cell3);
+                            row.appendChild(cell4);
+                            row.appendChild(cell5);
+                            row.appendChild(actionCell);
+
+                            tableBody.appendChild(row);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+
+                // the other one
+                fetch('/adminDB')
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody2 = document.getElementById('tableBody2');
+                        // Clear existing rows from the table
+                        tableBody2.innerHTML = '';
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+                            const cell1 = document.createElement('td');
+                            const cell2 = document.createElement('td');
+                            const cell3 = document.createElement('td');
+                            const cell4 = document.createElement('td');
+                            const cell5 = document.createElement('td');
+
+                            cell1.textContent = item._id;
+                            cell2.textContent = item.name;
+                            cell3.textContent = item.email;
+                            cell4.textContent = item.gender;
+                            cell5.textContent = item.contact;
+
+                            const actionCell = document.createElement('td');
+                            const actionButton = document.createElement('button');
+                            actionButton.textContent = 'test';
+                            actionButton.addEventListener('click', function () {
+                                // sendRowDataToServer(item, item._id);
+                            });
+                            actionCell.appendChild(actionButton);
+
+                            row.appendChild(cell1);
+                            row.appendChild(cell2);
+                            row.appendChild(cell3);
+                            row.appendChild(cell4);
+                            row.appendChild(cell5);
+                            row.appendChild(actionCell);
+
+                            tableBody2.appendChild(row);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+
+                fetch('/stylistDB')
+                    .then(response => response.json())
+                    .then(data => {
+                        const tableBody3 = document.getElementById('tableBody3');
+                        // Clear existing rows from the table
+                        tableBody3.innerHTML = '';
+                        data.forEach(item => {
+                            const row = document.createElement('tr');
+                            const cell1 = document.createElement('td');
+                            const cell2 = document.createElement('td');
+                            const cell3 = document.createElement('td');
+                            const cell4 = document.createElement('td');
+                            const cell5 = document.createElement('td');
+
+                            cell1.textContent = item._id;
+                            cell2.textContent = item.name;
+                            cell3.textContent = item.email;
+                            cell4.textContent = item.gender;
+                            cell5.textContent = item.contact;
+
+                            const actionCell = document.createElement('td');
+                            const actionButton = document.createElement('button');
+                            actionButton.textContent = 'test';
+                            actionButton.addEventListener('click', function () {
+                                // sendRowDataToServer(item, item._id);
+                            });
+                            actionCell.appendChild(actionButton);
+
+                            row.appendChild(cell1);
+                            row.appendChild(cell2);
+                            row.appendChild(cell3);
+                            row.appendChild(cell4);
+                            row.appendChild(cell5);
+                            row.appendChild(actionCell);
+
+                            tableBody3.appendChild(row);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            function showPopup(itemId) {
+                const popupContentContainer = document.getElementById('popup');
+                popupContentContainer.style.display = 'block';
+
+            }
+
+            function closePopup() {
+                const popupContentContainer = document.getElementById('popup');
+                popupContentContainer.style.display = 'none';
+            }
+        </script>
+        <style>
+            #Refresh {
+                border: none;
+                width: 100px;
+                height: 30px;
+                border-radius: 5px;
+                background: rgb(219, 219, 226);
+                color: rgb(0, 0, 0);
+                font-size: 15px;
+            }
+
+            .item5 {
+                display: flex;
+            }
+
+            .item a {
+                color: aqua;
+            }
+
+            .DataUser {
+                align-items: center;
+
+            }
+
+            .DataUser h3 {
+                color: white;
+                text-align: center;
+            }
+
+            /* Add a margin to the table or its parent container */
+            #tableContainer {
+                margin-top: 20px;
+                /* Adjust the margin as needed */
+            }
+
+            /* Style the table */
+            table {
+                width: 1200px;
+                /* Make the table fill its container */
+                border-collapse: collapse;
+                /* Combine table borders for a cleaner look */
+                table-layout: fixed;
+            }
+
+            /* Style the table header */
+            .ath {
+                background-color: #070007;
+                /* Background color for header cells */
+                text-align: left;
+                /* Align text to the left within header cells */
+                padding: 10px;
+                /* Padding for header cells */
+            }
+
+            .bth {
+                background-color: #0b2501;
+                /* Background color for header cells */
+                text-align: left;
+                /* Align text to the left within header cells */
+                padding: 10px;
+                /* Padding for header cells */
+            }
+
+            .cth {
+                background-color: #202501;
+                /* Background color for header cells */
+                text-align: left;
+                /* Align text to the left within header cells */
+                padding: 10px;
+                /* Padding for header cells */
+            }
+
+            /* Style the table body rows */
+            td {
+                padding: 10px;
+                /* Padding for body cells */
+                border-bottom: 1px solid #ddd;
+            }
+
+            td button {
+                border: none;
+                width: 90px;
+                height: 40px;
+                background: rgb(219, 219, 226);
+                padding: 9px;
+                border-radius: 5px;
+                color: rgb(0, 0, 0);
+                font-size: 17px;
+            }
+
+            .togglebutton {
+                border: none;
+                width: 250px;
+                background: rgb(219, 219, 226);
+                padding: 9px;
+                border-radius: 5px;
+                color: rgb(0, 0, 0);
+                font-size: 17px;
+                padding-left: 10px;
+            }
+
+            .popupAdmin {
+                display: none;
+                justify-items: center;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 20px;
+                background-color: rgba(255, 255, 255, 0.9);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                width: 400px;
+                min-height: 300px;
+                height: auto;
+                color: #000;
+                border-radius: 10px;
+                box-shadow: 0 0 20px 10px rgba(251, 251, 251, 0.12);
+            }
+
+            .popupbuttonadmin {
+                border: 1px solid rgb(0, 0, 0);
+                width: 90px;
+                height: 40px;
+                background: rgb(219, 219, 226);
+                border-radius: 5px;
+                color: rgb(0, 0, 0);
+                font-size: 17px;
+            }
+
+            .independent-container {
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                height: 50px;
+                width: 100%;
+            }
+        </style>
+    </body>
+
+</html>

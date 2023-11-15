@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Stylists - Douche Salon</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="MainSupport.css">
+    </head>
+    <div class="navigation">
+        <nav>
+            <h2 class="title"><a href="index.html"> <img src="Titlenobg.png" alt="image" width="280"></image></a></h2>
+            <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="ShopPage.html">Shop</a></li>
+            <li><a href="AboutPage.html">About</a></li>
+            <li><a href="BranchPage.html">Branches</a></li>
+            <li><a href="ServicePage.html">Services</a></li>
+            <div style="border: 1px solid black; border-radius: 5px;">
+            <li><a href="StylistPage.html">Stylist</a></li></div>
+        </ul>
+        <button id="login"  type="button" onclick="window.location.href='LoginPage.html'">Login</button>
+        <button id="logout" class="hidden" type="button" onclick="logoutUser();">Logout</button>
+        </nav>
+        </div>
+    </head>
+        <script src="MainSupport.js"></script>
+    <script>
+function getCookieValues(name) {
+    const cookieString = decodeURIComponent(document.cookie);
+    const cookies = cookieString.split('; ');
+
+    for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName === name) {
+            // Parse the JSON string back to an object
+            return JSON.parse(cookieValue);
+        }
+    }
+
+    // Return null or handle if the cookie is not found
+    return null;
+}
+
+function serveridentity(){
+//intrusive private sites
+const SessionKeyValue = getCookieValues('SessionKey');
+            if (!SessionKeyValue || !SessionKeyValue._id) {
+            window.location.href='LoginPage.html'
+        // Handle the error, redirect the user, or perform other actions as needed
+            } else {
+        fetch(`/sessionKey/${SessionKeyValue._id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })  
+            .then(data => {
+                if (data.error) {
+                    loginStatus.textContent = data.error;
+                } else {
+                    //logged user!!!
+                    document.getElementById('login').classList.add('hidden');
+                    document.getElementById('logout').classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                    document.getElementById('logout').classList.add('hidden');
+                    document.getElementById('login').classList.add('hidden');
+            });
+        };
+          };
+window.addEventListener('pageshow', function(event) {
+if (event.persisted) {//your trusty back button catcher
+serveridentity();
+}});
+          serveridentity();
+          setInterval(serveridentity, 300000);
+// Example function to simulate user logout
+function logoutUser() {
+  const cookieName = "SessionKey";
+  document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  // Hide the profile and logout links
+  document.getElementById('login').classList.remove('hidden');
+  document.getElementById('logout').classList.add('hidden');
+  window.location.href='index.html'
+}
+    </script>
+    <body>
+        <style>
+              /*This is done for the overlapping rules on the css,its specifically fitted for this page*/
+            .item4 img{
+                border: 0px !important;
+                height: auto;
+                width: 300px;
+            }
+        </style>
+        <div class="container4">
+            <div class="item4">
+                <img src="profilenone.png" alt="NoPfp ">
+                <h3>Gleyair</h3>
+                <p>Hair Stylist</p>
+            </div>
+            <div class="item4">
+                <img src="profilenone.png" alt="NoPfp ">
+                <h3>Nahyl</h3>
+                <p>Foot Spa Specialist</p>
+            </div>
+            <div class="item4">
+                <img src="profilenone.png" alt="NoPfp ">
+                <h3>Werry</h3>
+                <p>Rebond Specialist</p>
+            </div>
+            <div class="item4">
+                <img src="profilenone.png" alt="NoPfp ">
+                <h3>Laynardo</h3>
+                <p>All-round Specialist</p>
+            </div>
+            <div class="item4">
+                <img src="profilenone.png" alt="NoPfp ">
+                <h3>Kygen</h3>
+                <p>Male Hairstylist</p>
+            </div>
+            </div>
+            <footer>
+            </footer>
+    </body>
+    </html>

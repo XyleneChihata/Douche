@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Services - Douche Salon</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="MainSupport.js"></script>
+  <link rel="stylesheet" href="MainSupport.css">
+</head>
+<div class="navigation">
+  <nav>
+    <h2 class="title"><a href="index.html"> <img src="Titlenobg.png" alt="image" width="280"></image></a></h2>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="ShopPage.html">Shop</a></li>
+      <li><a href="AboutPage.html">About</a></li>
+      <li><a href="BranchPage.html">Branches</a></li>
+      <div style="border: 1px solid black; border-radius: 5px;">
+        <li><a href="ServicePage.html">Services</a></li>
+      </div>
+      <li><a href="StylistPage.html">Stylist</a></li>
+    </ul>
+    <button id="login" type="button" onclick="window.location.href='LoginPage.html'">Login</button>
+    <button id="logout" class="hidden" type="button"
+      onclick="logoutUser(); window.location.href='index.html'">Logout</button>
+  </nav>
+</div>
+<script>
+  function getCookieValues(name) {
+    const cookieString = decodeURIComponent(document.cookie);
+    const cookies = cookieString.split('; ');
+
+    for (const cookie of cookies) {
+      const [cookieName, cookieValue] = cookie.split('=');
+      if (cookieName === name) {
+        // Parse the JSON string back to an object
+        return JSON.parse(cookieValue);
+      }
+    }
+
+    // Return null or handle if the cookie is not found
+    return null;
+  }
+  function serveridentity() {
+    //intrusive private sites
+    const SessionKeyValue = getCookieValues('SessionKey');
+
+    if (!SessionKeyValue || !SessionKeyValue._id) {
+      window.location.href = 'LoginPage.html'
+      // Handle the error, redirect the user, or perform other actions as needed
+    } else {
+      fetch(`/sessionKey/${SessionKeyValue._id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.error) {
+            loginStatus.textContent = data.error;
+          } else {
+            //logged user!!!
+            document.getElementById('login').classList.add('hidden');
+            document.getElementById('logout').classList.remove('hidden');
+          }
+        })
+        .catch(error => {
+          document.getElementById('logout').classList.add('hidden');
+          document.getElementById('login').classList.add('hidden');
+        });
+    };
+  };
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {//your trusty back button catcher
+      serveridentity();
+    }
+  });
+  serveridentity();
+  setInterval(serveridentity, 300000);
+  // Example function to simulate user logout
+  function logoutUser() {
+    const cookieName = "SessionKey";
+    document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    // Hide the profile and logout links
+    document.getElementById('login').classList.remove('hidden');
+    document.getElementById('logout').classList.add('hidden');
+    window.location.href = 'index.html'
+  }
+</script>
+<script>
+  function clickselector() {
+    document.getElementById('Scroll').classList.remove('hidden');
+
+    //popup
+  }
+  function showPopup() {
+    const popup = document.getElementById('popup');
+    const selectedOptions = document.querySelectorAll('.containerSales + label');
+    const selectedOptionsList = popup.querySelector('.selected-options');
+    selectedOptionsList.innerHTML = '';
+    selectedOptions.forEach(option => {
+      const li = document.createElement('h5');
+      li.textContent = option.textContent;
+      selectedOptionsList.appendChild(li);
+    });
+    popup.style.display = 'block';
+  }
+
+  function closePopup() {
+    const popup = document.getElementById('popup');
+    popup.style.display = 'none';
+  }
+</script>
+
+<body>
+  <div class="floating-button2">
+    <a href="ServicePage.html#selection"><img src="arrowup.png" alt="Floating Image Button"></a>
+  </div>
+  <div class="containerHeader" id="selection">
+    <h2>Please select from the choices below.</h2>
+  </div>
+  <div class="container4">
+    <div class="item4">
+      <img src="rebond.png" alt="Rebond Services">
+      <h3>Rebond Services</h3>
+      <p>Quality rebond services</p>
+      <a href="ServicePage.html#auto1" class="image-overlay" onclick="clickselector();">
+        <h3>Check now!</h3>
+      </a>
+    </div>
+    <div class="item4">
+      <img src="keratin.png" alt="Keratin Services">
+      <h3>Brazilian Keratin Treatment Services</h3>
+      <p>Brazilian keratin packages</p>
+      <a href="ServicePage.html#auto2" class="image-overlay" onclick="clickselector();">
+        <h3>Check now!</h3>
+      </a>
+    </div>
+    <div class="item4">
+      <img src="haircolor.png" alt="Hair Coloring services">
+      <h3>Hair Coloring Services</h3>
+      <p>Choose from colors to shine</p>
+      <a href="ServicePage.html#auto3" class="image-overlay" onclick="clickselector();">
+        <h3>Check now!</h3>
+      </a>
+    </div>
+    <div class="item4">
+      <img src="Hair treatment.png" alt="Hair Treatment Services">
+      <h3>Hair Treatment Services</h3>
+      <p>Treat your hair some love</p>
+      <a href="ServicePage.html#auto4" class="image-overlay" onclick="clickselector();">
+        <h3>Check now!</h3>
+      </a>
+    </div>
+    <div class="item4">
+      <img src="hairextention.png" alt="Hair Extention Services">
+      <h3>Hair Extention Services</h3>
+      <p>For a new look</p>
+      <a href="ServicePage.html#auto5" class="image-overlay" onclick="clickselector();">
+        <h3>Check now!</h3>
+      </a>
+    </div>
+    <div class="item4">
+      <img src="manicure.png" alt="Manicure Services">
+      <h3>Manicure/Pedicure Services</h3>
+      <p>Define yourself with beauty</p>
+      <a href="ServicePage.html#auto6" class="image-overlay" onclick="clickselector();">
+        <h3>Check now!</h3>
+      </a>
+    </div>
+    <div class="item4">
+      <img src="footspa.png" alt="Footspa Services">
+      <h3>Foot Spa Services</h3>
+      <p>Relaxing time for yourself</p>
+      <a href="ServicePage.html#auto7" class="image-overlay" onclick="clickselector();">
+        <h3>Check now!</h3>
+      </a>
+    </div>
+  </div>
+  <div id="Scroll" class="hidden">
+    <div class="container3" id="serviceSelector">
+      <div class="item">
+        <h3>Rebond Services</h3>
+        <div class="containerSales" id="auto1">
+          <div class="itemSales">
+            <img src="rebond.png" alt="rebond.png">
+            <p>REBOND w/ Hair Mask PLUS FREE Hair Trimming</p>
+            <h2>₱799.95</h2>
+            <button class="buttonSalesCart" onclick="showPopup()" id="REBOND w/ Hair Mask PLUS FREE Hair Trimming">Book
+              Now</button>
+          </div>
+          <div class="itemSales">
+            <img src="rebond.png" alt="NoPfp ">
+            <p>REBOND w/ Washable Cello PLUS Hair Mask</p>
+            <h3>₱1,199.95</h3>
+            <button class="buttonSalesCart" onclick="showPopup()" id="REBOND w/ Washable Cello PLUS Hair Mask">Book
+              Now</button>
+          </div>
+          <div class="itemSales">
+            <img src="rebond.png" alt="NoPfp ">
+            <p>REBOND w/ Magic Keratin PLUS Washable Cello</p>
+            <h3>₱1,499.95</h3>
+            <button class="buttonSalesCart" onclick="showPopup()" id="REBOND w/ Magic Keratin PLUS Washable Cello">Book
+              Now</button>
+          </div>
+          <div class="itemSales">
+            <img src="rebond.png" alt="NoPfp ">
+            <p>REBOND w/ Magic Keratin PLUS Semidilino</p>
+            <h3>₱1,699.95</h3>
+            <button class="buttonSalesCart" onclick="showPopup()" id="REBOND w/ Magic Keratin PLUS Semidilino">Book
+              Now</button>
+          </div>
+        </div>
+        <div class="item">
+          <h3>Keratin Services</h3>
+          <div class="containerSales" id="auto2">
+            <div class="itemSales">
+              <img src="keratin.png" alt="keratin.png">
+              <p>REBOND w/ Hair Mask PLUS FREE Hair Trimming</p>
+              <h2>₱799.95</h2>
+              <button class="buttonSalesCart" onclick="showPopup()" id="Keratin01">Book Now</button>
+            </div>
+            <div class="itemSales">
+              <img src="keratin.png" alt="keratin.png">
+              <p>REBOND w/ Washable Cello PLUS Hair Mask</p>
+              <h3>₱1,199.95</h3>
+              <button class="buttonSalesCart" onclick="showPopup()" id="Keratin02">Book Now</button>
+            </div>
+            <div class="itemSales">
+              <img src="keratin.png" alt="keratin.png">
+              <p>REBOND w/ Magic Keratin PLUS Washable Cello</p>
+              <h3>₱1,499.95</h3>
+              <button class="buttonSalesCart" onclick="showPopup()" id="Keratin03">Book Now</button>
+            </div>
+            <div class="itemSales">
+              <img src="keratin.png" alt="keratin.png">
+              <p>REBOND w/ Magic Keratin PLUS Semidilino</p>
+              <h3>₱1,699.95</h3>
+              <button class="buttonSalesCart" onclick="showPopup()" id="Keratin04">Book Now</button>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <h3>Hair Coloring</h3>
+          <div class="containerSales" id="auto3">
+            <div class="itemSales">
+              <img src="haircolor.png" alt="rebond.png">
+              <p>REBOND w/ Hair Mask PLUS FREE Hair Trimming</p>
+              <h2>₱799.95</h2>
+              <button class="buttonSalesCart" onclick="showPopup()" id="haircolor01">Book Now</button>
+            </div>
+            <div class="itemSales">
+              <img src="haircolor.png" alt="NoPfp ">
+              <p>REBOND w/ Washable Cello PLUS Hair Mask</p>
+              <h3>₱1,199.95</h3>
+              <button class="buttonSalesCart" onclick="showPopup()" id="haircolor02">Book Now</button>
+            </div>
+            <div class="itemSales">
+              <img src="haircolor.png" alt="NoPfp ">
+              <p>REBOND w/ Magic Keratin PLUS Washable Cello</p>
+              <h3>₱1,499.95</h3>
+              <button class="buttonSalesCart" onclick="showPopup()" id="haircolor03">Book Now</button>
+            </div>
+            <div class="itemSales">
+              <img src="haircolor.png" alt="NoPfp ">
+              <p>REBOND w/ Magic Keratin PLUS Semidilino</p>
+              <h3>₱1,699.95</h3>
+              <button class="buttonSalesCart" onclick="showPopup()" id="haircolor04">Book Now</button>
+            </div>
+          </div>
+          <div class="item">
+            <h3>Hair Treatment</h3>
+            <div class="containerSales" id="auto4">
+              <div class="itemSales">
+                <img src="Hair treatment.png" alt="rebond.png">
+                <p>REBOND w/ Hair Mask PLUS FREE Hair Trimming</p>
+                <h2>₱799.95</h2>
+                <button class="buttonSalesCart" onclick="showPopup()" id="hairtreat01">Book Now</button>
+              </div>
+              <div class="itemSales">
+                <img src="Hair treatment.png" alt="NoPfp ">
+                <p>REBOND w/ Washable Cello PLUS Hair Mask</p>
+                <h3>₱1,199.95</h3>
+                <button class="buttonSalesCart" onclick="showPopup()" id="hairtreat02">Book Now</button>
+              </div>
+              <div class="itemSales">
+                <img src="Hair treatment.png" alt="NoPfp ">
+                <p>REBOND w/ Magic Keratin PLUS Washable Cello</p>
+                <h3>₱1,499.95</h3>
+                <button class="buttonSalesCart" onclick="showPopup()" id="hairtreat03">Book Now</button>
+              </div>
+              <div class="itemSales">
+                <img src="Hair treatment.png" alt="NoPfp ">
+                <p>REBOND w/ Magic Keratin PLUS Semidilino</p>
+                <h3>₱1,699.95</h3>
+                <button class="buttonSalesCart" onclick="showPopup()" id="hairtreat04">Book Now</button>
+              </div>
+            </div>
+            <div class="item">
+              <h3>Hair Extention Services</h3>
+              <div class="containerSales" id="auto5">
+                <div class="itemSales">
+                  <img src="hairextention.png" alt="rebond.png">
+                  <p>REBOND w/ Hair Mask PLUS FREE Hair Trimming</p>
+                  <h2>₱799.95</h2>
+                  <button class="buttonSalesCart" onclick="showPopup()" id="hairext01">Book Now</button>
+                </div>
+                <div class="itemSales">
+                  <img src="hairextention.png" alt="NoPfp ">
+                  <p>REBOND w/ Washable Cello PLUS Hair Mask</p>
+                  <h3>₱1,199.95</h3>
+                  <button class="buttonSalesCart" onclick="showPopup()" id="hairext02">Book Now</button>
+                </div>
+                <div class="itemSales">
+                  <img src="hairextention.png" alt="NoPfp ">
+                  <p>REBOND w/ Magic Keratin PLUS Washable Cello</p>
+                  <h3>₱1,499.95</h3>
+                  <button class="buttonSalesCart" onclick="showPopup()" id="hairext03">Book Now</button>
+                </div>
+                <div class="itemSales">
+                  <img src="hairextention.png" alt="NoPfp ">
+                  <p>REBOND w/ Magic Keratin PLUS Semidilino</p>
+                  <h3>₱1,699.95</h3>
+                  <button class="buttonSalesCart" onclick="showPopup()" id="hairext04">Book Now</button>
+                </div>
+              </div>
+              <div class="item">
+                <h3>Manicure Pedicure</h3>
+                <div class="containerSales" id="auto6">
+                  <div class="itemSales">
+                    <img src="manicure.png" alt="rebond.png">
+                    <p>REBOND w/ Hair Mask PLUS FREE Hair Trimming</p>
+                    <h2>₱799.95</h2>
+                    <button class="buttonSalesCart" onclick="showPopup()" id="manecure01">Book Now</button>
+                  </div>
+                  <div class="itemSales">
+                    <img src="manicure.png" alt="NoPfp ">
+                    <p>REBOND w/ Washable Cello PLUS Hair Mask</p>
+                    <h3>₱1,199.95</h3>
+                    <button class="buttonSalesCart" onclick="showPopup()" id="manecure02">Book Now</button>
+                  </div>
+                  <div class="itemSales">
+                    <img src="manicure.png" alt="NoPfp ">
+                    <p>REBOND w/ Magic Keratin PLUS Washable Cello</p>
+                    <h3>₱1,499.95</h3>
+                    <button class="buttonSalesCart" onclick="showPopup()" id="manecure03">Book Now</button>
+                  </div>
+                  <div class="itemSales">
+                    <img src="manicure.png" alt="NoPfp ">
+                    <p>REBOND w/ Magic Keratin PLUS Semidilino</p>
+                    <h3>₱1,699.95</h3>
+                    <button class="buttonSalesCart" onclick="showPopup()" id="manecure04">Book Now</button>
+                  </div>
+                </div>
+              </div>
+              <div class="item">
+                <h3>Foot Spa Services</h3>
+                <div class="containerSales" id="auto7">
+                  <div class="itemSales">
+                    <img src="footspa.png" alt="rebond.png">
+                    <p>REBOND w/ Hair Mask PLUS FREE Hair Trimming</p>
+                    <h2>₱799.95</h2>
+                    <button class="buttonSalesCart" onclick="showPopup()" id="footspa01">Book Now</button>
+                  </div>
+                  <div class="itemSales">
+                    <img src="footspa.png" alt="NoPfp ">
+                    <p>REBOND w/ Washable Cello PLUS Hair Mask</p>
+                    <h3>₱1,199.95</h3>
+                    <button class="buttonSalesCart" onclick="showPopup()" id="footspa02">Book Now</button>
+                  </div>
+                  <div class="itemSales">
+                    <img src="footspa.png" alt="NoPfp ">
+                    <p>REBOND w/ Magic Keratin PLUS Washable Cello</p>
+                    <h3>₱1,499.95</h3>
+                    <button class="buttonSalesCart" onclick="showPopup()" id="footspa03">Book Now</button>
+                  </div>
+                  <div class="itemSales">
+                    <img src="footspa.png" alt="NoPfp ">
+                    <p>REBOND w/ Magic Keratin PLUS Semidilino</p>
+                    <h3>₱1,699.95</h3>
+                    <button class="buttonSalesCart" onclick="showPopup()" id="footspa04">Book Now</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="popup" id="popup">
+
+      <div class="popup-header">
+        <h2>Schedule the Booking:</h2>
+        <span class="popup-close" onclick="closePopup()">×</span>
+      </div>
+      <div class="popup-footer">
+        <p class="popup-footerItem">The following are your schedule information:</p>
+        <div class="popup-footerItem">
+          <table id="data-table">
+            <tr>
+              <td>Date:</td>
+              <td id="dateHeader"></td>
+            </tr>
+            <tr>
+              <td>Package:</td>
+              <td id="productHeader"></td>
+            </tr>
+            <tr>
+              <td>Appointment Time:</td>
+              <td id="timePending"></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="next">
+        <div class="popupcontainer">
+          <div class="popup-footer">
+            <div class="popup-footerItem">
+              <p>Select the Stylist</p>
+            </div>
+            <div class="popupSplit">
+              <div class="stySelector" id="stySelector"></div>
+            </div>
+          </div>
+        </div>
+        <div class="popup-footerItem">
+          <button class="confirm-btn" onclick="processswitch()">Proceed to Next</button>
+        </div>
+      </div>
+      <div id="back" class="hidden">
+        <div class="popupcontainer">
+          <div class="popupSplit">
+            <p>Select the Date:</p>
+            <div style="display: flex; justify-content: center; height: 10px;" id="monthname"></div>
+            <div class="serviceCalendarGrid" id="weeknames"></div>
+            <form id="datePending"></form>
+          </div>
+          <div class="popupSplit">
+            <p>Available Time</p>
+            <form class="timeSelector" id="timeSelector"></form>
+          </div>
+          <div class="selected-options"></div>
+        </div>
+        <div class="popup-footer">
+          <div class="popup-footerItem">
+            <button class="confirm-btn" onclick="processswitch()">Back</button>
+          </div>
+
+          <button class="confirm-btn" id="finalbutton" onclick="schedulefinal()">Confirm Schedule</button>
+        </div>
+        <div class="popup-footerItem">
+          <p style="color: black;">Please note that this schedule is being processed once you book.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+
+    function setCookie(name, value, daysToExpire) {
+      const jsonValue = JSON.stringify(value);
+      const expirationDate = new Date();
+      expirationDate.setTime(expirationDate.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+      const expires = "expires=" + expirationDate.toUTCString();
+      const secureAttribute = window.location.protocol === "https:" ? ";Secure" : "";
+
+      document.cookie = name + "=" + jsonValue + ";" + expires + ";path=/" + secureAttribute;
+    }
+
+    const scheduleButton = document.getElementById('finalbutton');
+    // Get the inner HTML of the elements by their IDs
+    const dateHeaderInnerHTML = document.getElementById('dateHeader').innerHTML;
+    const productHeaderInnerHTML = document.getElementById('productHeader').innerHTML;
+    const timePendingInnerHTML = document.getElementById('timePending').innerHTML;
+
+    function schedulefinal() {
+      // Get the inner HTML of the elements by their IDs
+      const dateHeaderInnerHTML = document.getElementById('dateHeader').innerHTML;
+      const productHeaderInnerHTML = document.getElementById('productHeader').innerHTML;
+      const timePendingInnerHTML = document.getElementById('timePending').innerHTML;
+
+      const SessionKeyValue = getCookieValues('SessionKey');
+
+      const UserRequest = {
+        _id: SessionKeyValue._id,
+        date: dateHeaderInnerHTML,
+        time: timePendingInnerHTML,
+        package: productHeaderInnerHTML
+      };
+
+      fetch(`/queue`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(UserRequest)
+      })
+        .then(response => {
+          if (response.ok) {
+            // If the response status is OK (200), show success message
+            alert('Your appointment has been sent to the processing, please wait for confirmation');
+            closePopup()
+          } else {
+            // If the response status is not OK (i.e., 400 or above), handle the error
+            return response.json().then(error => Promise.reject(error));
+          }
+        })
+        .catch(error => {
+          if (error && error.error) {
+            // Handle the specific validation error response (status 400)
+            alert(error.error);
+          } else {
+            // Handle other errors
+            alert('Error: ' + error.message);
+          }
+        });
+
+      console.log(UserRequest);
+    }
+
+
+
+    let isSwitchOn = true;
+    function processswitch() {
+      isSwitchOn = !isSwitchOn;
+
+      const Proceed = document.getElementById('next');
+      const Return = document.getElementById('back');
+
+      if (isSwitchOn) {
+        Proceed.classList.add('hidden');
+        Return.classList.remove('hidden');
+      } else {
+        Return.classList.add('hidden');
+        Proceed.classList.remove('hidden');
+      }
+    }
+  </script>
+  <script>
+    //button data that will be shown to the user
+    const buttonData = [
+      { id: '9:00 AM', type: 'button', class: 'timerBtn', text: '9:00 AM' },
+      { id: '10:00 AM', type: 'button', class: 'timerBtn', text: '10:00 AM' },
+      { id: '11:00 AM', type: 'button', class: 'timerBtn', text: '11:00 AM' },
+      { id: '12:00 PM', type: 'button', class: 'timerBtn', text: '12:00 PM' },
+      { id: '1:00 PM', type: 'button', class: 'timerBtn', text: '1:00 PM' },
+      { id: '2:00 PM', type: 'button', class: 'timerBtn', text: '2:00 PM' },
+      { id: '3:00 PM', type: 'button', class: 'timerBtn', text: '3:00 PM' },
+      { id: '4:00 PM', type: 'button', class: 'timerBtn', text: '4:00 PM' },
+      { id: '5:00 PM', type: 'button', class: 'timerBtn', text: '5:00 PM' },
+      { id: '6:00 PM', type: 'button', class: 'timerBtn', text: '6:00 PM' },
+      { id: '7:00 PM', type: 'button', class: 'timerBtn', text: '7:00 PM' }
+    ];
+
+    const processedData = [
+    ]
+
+    const timeSelector = document.getElementById('timeSelector');
+    const timePending = document.getElementById('timePending');
+    const serviceSelector = document.getElementById('serviceSelector');
+
+
+
+    function createButton(buttonInfo) {
+      const button = document.createElement('button');
+      button.id = buttonInfo.id;
+      button.textContent = buttonInfo.text;
+      button.className = buttonInfo.class;
+      button.type = buttonInfo.type;
+
+      //youre fixing this now
+      button.addEventListener('click', function () {
+        timePending.innerHTML = `${buttonInfo.text}`;
+      });
+
+      return button;
+    }
+
+    //if existing checker
+    function addNewButtons(buttonDataArray, existingButtonsArray) {
+      buttonDataArray.forEach(buttonInfo => {
+        const isButtonExisting = existingButtonsArray.some(existingButton => existingButton.id === buttonInfo.id);
+
+        if (!isButtonExisting) {
+          const newButton = createButton(buttonInfo);
+          timeSelector.appendChild(newButton);
+        }
+      });
+    }
+
+    addNewButtons(buttonData, processedData);
+
+    //date generator
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const numberOfDays = 5;
+    const datePending = document.getElementById('datePending');
+    const dateHeader = document.getElementById('dateHeader');
+
+    //heres for month specifically
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const monthNameElement = document.getElementById('monthname');
+
+    const currentMonth = today.getMonth();
+    monthNameElement.textContent = monthNames[currentMonth];
+    const monthname2 = monthNames[currentMonth];
+
+    const productHeader = document.getElementById('productHeader');
+
+    const buttons = document.querySelectorAll('.buttonSalesCart');
+
+
+    buttons.forEach(button => {
+      button.addEventListener('click', function () {
+        const productid = this.id; // Retrieve the id of the clicked button
+        productHeader.innerHTML = `${productid}`;
+      });
+    });
+
+    for (let i = 1; i <= numberOfDays; i++) {
+      const futureDate = new Date();
+      futureDate.setDate(today.getDate() + i);
+
+      const monthIndex = futureDate.getMonth();
+      const monthName = monthNames[monthIndex];
+
+      const dayElement = document.createElement('button');
+      dayElement.classList.add('timerBtnB');
+      dayElement.type = 'button';
+      dayElement.textContent = futureDate.getDate();
+
+      dayElement.addEventListener('click', function () {
+        dateHeader.innerHTML = `${monthName} ${dayElement.textContent}`;
+      });
+
+      datePending.appendChild(dayElement);
+    }
+
+
+    //week names
+    function displayWeekDays() {
+      const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const today = new Date();
+      const currentDayIndex = today.getDay();
+      const weeknames = document.getElementById('weeknames');
+
+      // Display 3 days behind today and the days of the week
+      for (let i = 1; i <= numberOfDays; i++) {
+        const dayIndex = (currentDayIndex + i + 7) % 7; // Ensure positive index and wrap around for the next week
+        const weekElement = document.createElement('div');
+        weekElement.classList.add('headerbutton');
+
+        // Display the day name
+        weekElement.textContent = daysOfWeek[dayIndex];
+        weeknames.appendChild(weekElement);
+      }
+    }
+
+    // Call the function to display the week's days
+    displayWeekDays();
+  </script>
+  <style>
+    #data-table {
+      border-collapse: collapse;
+      width: 600px;
+      table-layout: fixed;
+    }
+
+    #data-table tr {
+      border-bottom: 1px solid #ccc;
+    }
+
+    #data-table td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    #data-table {
+      border: 1px solid #ccc;
+    }
+
+    .confirm-btn:hover {
+      transform: scale(1.01);
+      cursor: pointer;
+    }
+
+    .confirm-btn {
+      border: none;
+      width: 430px;
+      background: rgb(219, 219, 226);
+      padding: 12px 30px;
+      border-radius: 10px;
+      color: rgb(0, 0, 0);
+      font-size: 20px;
+      border: solid 1px black;
+    }
+  </style>
+</body>
+
+</html>

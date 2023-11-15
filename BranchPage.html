@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Branches - Douche Salon</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="MainSupport.css">
+</head>
+<body>
+<header>
+    <div class="navigation">
+    <nav>
+        <h2 class="title"><a href="index.html"> <img src="Titlenobg.png" alt="image" width="280"></image></a></h2>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="ShopPage.html">Shop</a></li>
+        <li><a href="AboutPage.html">About</a></li>
+        <div style="border: 1px solid black; border-radius: 5px;">
+        <li><a href="BranchPage.html">Branches</a></li></div>
+        <button id="Reserve" onclick="window.location.href='RegisterPage.html'">Reserve Now ></button>
+        <li id="Shop" class="hidden"><a href="ServicePage.html">Services</a></li>
+        <li id="Stylist" class="hidden"><a href="StylistPage.html">Stylist</a></li>
+    </ul>
+    <button id="login"  type="button" onclick="window.location.href='LoginPage.html'">Login</button>
+    <button id="logout" class="hidden" type="button" onclick="logoutUser(); window.location.href='index.html'">Logout</button>
+</nav>
+</div>
+</header>
+<script src="MainSupport.js"></script>
+<script>
+function getCookieValues(name) {
+    const cookieString = decodeURIComponent(document.cookie);
+    const cookies = cookieString.split('; ');
+
+    for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName === name) {
+            // Parse the JSON string back to an object
+            return JSON.parse(cookieValue);
+        }
+    }
+
+    // Return null or handle if the cookie is not found
+    return null;
+}
+
+function serveridentity(){
+//intrusive private sites
+const SessionKeyValue = getCookieValues('SessionKey');
+        
+        fetch(`/sessionKey/${SessionKeyValue._id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })  
+            .then(data => {
+                if (data.error) {
+                    loginStatus.textContent = data.error;
+                } else {
+                    //logged user!!!
+                    document.getElementById('Shop').classList.remove('hidden');
+                    document.getElementById('Stylist').classList.remove('hidden');
+                    document.getElementById('login').classList.add('hidden');
+                    document.getElementById('Reserve').classList.add('hidden');
+                    document.getElementById('logout').classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                    document.getElementById('Shop').classList.add('hidden');
+                    document.getElementById('Stylist').classList.add('hidden');
+                    document.getElementById('login').classList.remove('hidden');
+                    document.getElementById('Reserve').classList.remove('hidden');
+                    document.getElementById('logout').classList.add('hidden');
+            });
+          };
+window.addEventListener('pageshow', function(event) {
+if (event.persisted) {//your trusty back button catcher
+serveridentity();
+}});
+          serveridentity();
+          setInterval(serveridentity, 300000);
+// Example function to simulate user logout
+function logoutUser() {
+  const cookieName = "SessionKey";
+  document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  // Hide the profile and logout links
+  document.getElementById('Shop').classList.add('hidden');
+  document.getElementById('Stylist').classList.add('hidden');
+  document.getElementById('login').classList.remove('hidden');
+  document.getElementById('logout').classList.add('hidden');
+}
+</script>
+<body>
+    <div class="containerHeader">
+        <h2>Visit our branches near you:</h2>
+        </div>
+    <div class="container3">
+        <div class="item">
+            <a href="https://www.facebook.com/DoucheHairSalon"><img src="BranchSucat.jpg" alt="Sucat"><span class="text">Visit Facebook Page</span></a>
+    <h3>Sucat Branch</h3>
+        <p>8727 Door C San Pedro  San Isidro, Paranaque City</p>
+        </div>
+        <div class="item">
+            <a href="https://www.facebook.com/profile.php?id=100089756386741"><img src="BranchBaclaran.jpg" alt="Baclaran"><span class="text">Visit Facebook Page</span></a>
+    <h3>Baclaran Branch</h3>
+        <p>210 Quirino Ave. Baclaran, Paranaque City</p>
+        </div>
+        <div class="item">
+            <a href="https://www.facebook.com/profile.php?id=100064862161310"><img src="BranchTungko.jpg" alt="Tungko">
+                <span class="text">Visit Facebook Page</span></a>
+    <h3>Tungko</h3>
+        <p>Dalisay Market, Brgy. Tungkong Mangga San Jose Del Monte, Bulacan</p>
+        </div>
+        <div class="item">
+            <a href="https://www.facebook.com/profile.php?id=100089861959058"><img src="BranchMalabon.jpg" alt="Navotas"><span class="text">Visit Facebook Page</span></a>
+     <h3>Navotas</h3>
+        <p>318 North Bay Boulevard South, Navotas City</p>
+        </div>
+        <div class="item">
+            <a href="https://www.facebook.com/profile.php?id=100070258173607"><img src="BranchNovaliches.jpg" alt="Novaliches">
+                <span class="text">Visit Facebook Page</span></a>
+     <h3>Novaliches</h3>
+        <p>Blk. 22 Lot 1 Jordan Plains Subd. Quirino Highway cor. Salvador Ave., Novaliches Sta. Monica, Quezon City</p>
+        </div>
+    </div>
+    </div>
+  </div>
+  <style>
+.item {
+    position: relative;
+}
+
+.item img {
+    transition: filter 0.3s;
+}
+
+.item:hover img {
+    filter: brightness(40%);
+}
+
+.text {
+    position: absolute;
+    bottom: 55%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    color: rgb(255, 255, 255);
+    transition: opacity 0.3s;
+    text-decoration: solid;
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.item:hover .text {
+    opacity: 1;
+}
+
+  </style>
+  <footer>
+</footer>
+</body>
+</html>

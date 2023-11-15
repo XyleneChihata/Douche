@@ -1,0 +1,16 @@
+The customer is going to visit the site adn be greeted with a screen
+with mostly front page and with limited access to things
+Access limited to users who logged i (The Stylist, Services,  
+the costumer is to login
+
+the costumer is to visit the service page
+
+the costumer is to click on one of the images as the base line of
+operation.
+
+the customer is to see services in relation the image selected
+
+the customer is to add it to their  cart
+
+the costumer is to then schedule the service.
+

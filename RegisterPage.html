@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="MainSupport.css">
+    <title>Register - Douche Salon</title>
+    <!-- The java script -->
+    <style>
+body{
+    background-image: url(bgback.jpg);
+    background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+}
+* {
+  box-sizing: initial !important;
+}
+
+    </style>
+</head>
+    <body>
+        <!-- floating button -->
+        <div class="floating-button">
+            <a href="index.html"><img src="Titlenobg.png" alt="Floating Image Button"></a>
+        </div>
+        <!-- the content of login box -->
+        <div class="container5">
+            <div class="login-box">
+            <img src="Titlenobg.png" alt="Douche Salon">
+            <br>
+            <h2>Sign up</h2>
+            <form id="registerForm">
+                <label for="registerEmail">Email:  <div style="color: red;" id="registerStatus"></div></label>
+                <input type="text" id="registerEmail" required>
+                <br>
+                <label for="registerContact">Contact No:</label>
+                <input type="tel" id="registerContact" pattern="[0-9]{11}" maxlength="11" id="phoneNumber" placeholder="Enter 11 digit number" inputmode="numeric" required>
+                <br>
+                <label for="registerGender">Gender:</label>
+                <div class="radio">
+                <input type="radio" name="gender" id="Male">Male
+                <input type="radio" name="gender" style="margin-left: 20px;" id="Female">Female
+                <input type="radio" name="gender" style="margin-left: 20px;" id="Prefer not to say" checked>Unspecified</div>
+                <br>
+                <label for="registerName">Full Name:</label>
+                <input type="text" id="registerName" required>
+                <br>
+                <label for="registerUsername">Username:</label>
+                <input type="text" id="registerUsername" maxlength="25" required>
+                <br>
+                <label for="registerPassword">Password:</label>
+                <input type="password" id="registerPassword" required>
+                <br>
+                <button type="submit">Register</button>
+              </form>
+              <p>Already have Acccount? <a href="LoginPage.html">Login now</a></p>
+            </div>
+          </div>
+          <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    const registerForm = document.getElementById('registerForm');
+    const registerStatus = document.getElementById('registerStatus');
+
+    registerForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const newName = document.getElementById('registerName').value;
+        const newContact = document.getElementById('registerContact').value;
+        const newEmail = document.getElementById('registerEmail').value;
+        const newUsername = document.getElementById('registerUsername').value;
+        const newPassword = document.getElementById('registerPassword').value;
+
+        function getSelectedGender() {
+            var genderRadios = document.getElementsByName("gender");
+
+            var newGender = "None";
+
+            for (var i = 0; i < genderRadios.length; i++) {
+                if (genderRadios[i].checked) {
+                    newGender = genderRadios[i].id;
+                    break;
+                }
+            }
+
+            return newGender;
+        }
+        const newGender = getSelectedGender();
+
+        // Prepare the data to be sent in the request body
+        const userData = {
+            name: newName,
+            gender: newGender,
+            contact: newContact,
+            email: newEmail,
+            _id: newUsername,
+            password: newPassword
+        };
+
+//the cookie delivery hotline :)
+function SessionDataSent() {
+
+//uid generation for auth
+function generateUID(length = 15) {
+const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const charactersLength = characters.length;
+let uid = '';
+
+for (let i = 0; i < length; i++) {
+    uid += characters.charAt(Math.floor(Math.random() * charactersLength));
+}
+
+return uid;
+}
+
+const uid = generateUID();
+
+// The furnace of our cookie maker
+function setCookie(name, value, daysToExpire) {
+const jsonValue = JSON.stringify(value);
+const expirationDate = new Date();
+expirationDate.setTime(expirationDate.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+const expires = "expires=" + expirationDate.toUTCString();
+const secureAttribute = window.location.protocol === "https:" ? ";Secure" : "";
+
+document.cookie = name + "=" + jsonValue + ";" + expires + ";path=/" + secureAttribute;
+}
+
+const Hotcookies = {
+_id: newUsername,
+sessionid: uid
+};
+
+// The naming of the owner of the cookie along with the barcode and feeding the browser
+setCookie('SessionKey', Hotcookies, 3);
+
+
+// sending the cookie tracker information to database
+fetch('/sessionKey', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(Hotcookies)
+    })
+};
+
+
+
+        // Send a POST request to endpoint
+        fetch('/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                registerStatus.textContent = data.error;
+            } else {
+                registerStatus.textContent = "Registration Successful!";
+                SessionDataSent();
+                alert('Registration successful!'); 
+                window.location.href = 'index.html';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            registerStatus.textContent = "An error occurred. Please try again later.";
+        });
+});    });
+</script>
+
+    </body>
+
+    </html>

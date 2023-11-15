@@ -1,0 +1,56 @@
+The Full scope:
+
+Front End User:
+- Adding feature, Fixing security. Relating the confirmation of email when registering a new account, having to go through mail by sending a code and confirming it on RegisterPage.html
+
+- Creation of user profile page (UserProfile.html), giving user the ability of editing their personal informations (name, infos, contact number and email with confirmation).
+
+- Along with user profile is the ability to check their already scheduled appointment and ability to cancel the request. They can view if its pending(in UserRequestDB) or accepted(in PublicScheduleDB).
+
+- Adding feature, Connecting shop into inventoryDB. making it so that when clicked they can then be redirected to a specific service related to the product the availed
+and for them to check if the item is available to add to the service
+
+- Finalizing Services.html with stylist information similar to StylistPage.html.(
+    User pick a stylist > user pick date for the stylist up to 5 days ahead > show available time for stylist + date (empty if all taken or stylist is unavailable by the day) > then offers option to select another service repeating the same process.
+)
+
+- Adding time intervals difference for each service(
+    Rebond/Hair coloring/Brazillian is to take 4 hour gap between each appointment (will disappear if available is less than 4 before a time gap) and it would take all 4h slots of a stylist available time.
+    Haircut/Manicure/Footspa is to take 1 hour slot.
+)
+
+- Data passes to UserRequest(DB). Data from this database is to be filtered by admin and passed to PublicSchedule(DB) (
+    Once acccepted and on public schedule will then take stylist, time + estimated time to be taken, and remove the selected at the view of services.html making it not visible to future bookings since its accepted.
+)
+
+- Stylist page is to be changed into upload image wall. I cant imagine how this would go.
+
+Back Admin View:
+
+- Adding feature, Admin Page.html action button decision is to be reflected on the user profile for accepted status then sending a mail into the gmail/email of the user, 
+also if in case with the reason; if otherwise its a cancellation of request.
+
+- Adding feature, Admin page.html is to have a button to sort dates by day and put them to top of the list (even a hidden container to appear with specified date items that matches).
+
+- Adding a feature to view all schedule in the past, as we dont really delete the accepted ones as they go.
+
+- Admin Page Userdata.html UI change. (
+    - On User Database the ability to blacklist a specific gmail from creating an account in registy, delete an account, review password, assign roles(perms:) like stylist/admin.
+    - On Admin Database the ability to modify roles(perms:)
+    - On Stylist Database the ability to modify roles(perms:)
+)
+
+- Adding feature, Scheduling is for out of queue appointment, availability relates to stylist active status if they are present or accepting request (duration if its day long or toggle for inactive),
+manual scheduling relates to the ability of admin to take a date and time of a stylist directly that would reflect directly to PublicShedule(DB).
+
+- Adding feature, Inventory is ability to add, remove or modify an information regarding an item that will be shown on shop.html from InventoryData(DB).
+
+Back Stylist View:
+
+- Adding feature, The page contains a week ahead and 3 days behind calendar structure where depending on what the stylist chose will display the schedule for the selected date.
+
+- Adding feature, The page is to also contain access to profile the same as the user. However it would contain availability to change status activity to accept or not accept a request for a span of day or toggle. 
+A more detailed profile involving profession, and services where the can appear as a selection.
+They can also modify their schedule of time they are available on specific week day (the default basis for UserRequest schedule for cases where stylist is available. 
+Just a table of mon to fri, and 9am to 7pm check button per hour).
+

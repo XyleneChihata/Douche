@@ -1,0 +1,61 @@
+Coded by Xylene.
+
+FILES:
+- controllers are data handler and i forgot what they do specifically.
+- models are the backend confirmation before it passes to the database, must comply with datamodel before it is processed into the database, this is to ensure
+that the error handling is capable of receing and responding to errors.
+- node modules are the backend server files, do not mess with it.
+- The Not related are simply unrelated stuff during its development.
+- routes are server connection to routes api is important.
+
+.gitignore - it is simply for git to ignore the node files.
+
+.htmls - are the the front end of the website
+
+package.json - is the package information, these are the ones installed to the website through node.
+
+index.js - the core of the backend, handles the request from the frontend through ports that receives information and data and passes it to the models.
+
+MainSuppport.css - the core css for the entire project, contains most of the designs aside from page specific styles that is unique ti the page or required to load first or last.
+
+.png - are scattered mess, apologies
+
+MainSupport.js - is specifically for the index.html, for the slideshow, it didnt work well as a hub for all the js like the .css did since some had to load first before the
+page did and creating more files would annoy me kek.
+
+The organization of DB is done through models.
+- AdminInputs(DB) collection are tied to what the admin interacts, priority here is that no user will touch this collection and can only get data from here.
+- AdminData(DB) is currently empty. with no designated purpose, posibiblity is posting uploads. which is simply saving the information into the DB as it goes to "/Uploads" folder
+- StylistData(DB) is to be put to use in case much specific use of data is to be applied, however its mostly to be handled by PublicSchedule(DB).
+- SessionStorage(DB) is where session for login is handled, Login.html/Register.html create or update a new one of these, its creating a cookie that checks if user is logged in
+and deletes the old cookie and logout the old device. It can also be used by admin to logout a specific username's device, as for usage of such function, its not planned.
+- UserInputs(DB) a specific database to contain user inputs.
+- UserData(DB) will contain information of all user through the website, I understand its vulnerabilty but it also handles the perms: (user,stylist,admin) of a user,
+the same with stylistActive status.
+- UserRequest(DB) contains all the requests that are pending and in queue to admin, it will not reflect in services and does not apply until it goes into PublicSchedule(DB). The same
+case it will not deduc on the Admin Page Inventory.html
+
+So far the system had few points of priority:
+The front page for client. The priority here is (
+    - Fixing security. Relating the confirmation of email when registering a new account, having to go through mail by sending a code and confirming it on RegisterPage.html
+    - Creation of user profile page (UserProfile.html), editing informations on the DB mostly just DB get.
+    - Connecting shop into inventoryDB.
+    - Finalizing Services.html with stylist information similar to StylistPage.html. User pick a stylist, user pick date, show available time for stylist + date. show on user profile on finalized. Data passes to UserRequest(DB).
+    data from this page is to be taken from PublicSchedule(DB) as it contains data that pass through the admin first.
+    - Stylist is to be changed into upload image wall. I cant imagine how this would go.
+)
+
+The Admin Part. The priority here is mostly UI, and possible optimization of DB, otherwise the base is complete (
+    - Admin Page.html action button is to be reflected on the user profile for accepted status then sending a mail into the gmail/email of the user, also if in case with the reason; if otherwise its a cancellation of request.
+    - Admin Page Userdata.html is for UI.
+    - Scheduling is for out of queue appointment, availability relates to stylist active status if they are present or accepting request (duration if its day or toggle for inactive),
+    manual scheduling relates to the ability of admin to take a date and time of a stylist directly that would reflect directly to PublicShedule(DB).
+    - Inventory is alot simplier, ability to add, remove or modify an information regarding an item that will be shown on shop.html from InventoryData(DB).
+)
+
+The Stylist Part. Majority of it is schedule display directly filtered from PublicSchedule(DB) and to be displayed directly for them(
+    - The page contains a week ahead and days behind calendar structure where depending on what the stylist chose will display the schedule for the selected date.
+    - The page is to also contain access to profile the same as the user. however it would contain availability to change status activity.
+)
+
+I posted the results of Meetings with the adviser along with the mock defense as images. can be found on "/Not relateed" folder. 

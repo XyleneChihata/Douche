@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>About Us - Douche Salon</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="MainSupport.css">
+</head>
+<body>
+    <script src="MainSupport.js"></script>
+<header>
+    <div class="navigation">
+    <nav>
+        <h2 class="title"><a href="index.html"> <img src="Titlenobg.png" alt="image"  width="280"></image></a></h2>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="ShopPage.html">Shop</a></li>
+        <div style="border: 1px solid black; border-radius: 5px;">
+        <li><a href="AboutPage.html">About</a></li></div>
+        <li><a href="BranchPage.html">Branches</a></li>
+        <button id="Reserve" onclick="window.location.href='RegisterPage.html'">Reserve Now ></button>
+        <li id="Shop" class="hidden"><a href="ServicePage.html">Services</a></li>
+        <li id="Stylist" class="hidden"><a href="StylistPage.html">Stylist</a></li>
+    </ul>
+    <button id="login"  type="button" onclick="window.location.href='LoginPage.html'">Login</button>
+    <button id="logout" class="hidden" type="button" onclick="logoutUser(); window.location.href='index.html'">Logout</button>
+</nav>
+</div>
+</header>
+<script>
+function getCookieValues(name) {
+    const cookieString = decodeURIComponent(document.cookie);
+    const cookies = cookieString.split('; ');
+
+    for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName === name) {
+            // Parse the JSON string back to an object
+            return JSON.parse(cookieValue);
+        }
+    }
+
+    // Return null or handle if the cookie is not found
+    return null;
+}
+
+function serveridentity(){
+//intrusive private sites
+const SessionKeyValue = getCookieValues('SessionKey');
+        
+        fetch(`/sessionKey/${SessionKeyValue._id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })  
+            .then(data => {
+                if (data.error) {
+                    loginStatus.textContent = data.error;
+                } else {
+                    //logged user!!!
+                    document.getElementById('Shop').classList.remove('hidden');
+                    document.getElementById('Stylist').classList.remove('hidden');
+                    document.getElementById('login').classList.add('hidden');
+                    document.getElementById('Reserve').classList.add('hidden');
+                    document.getElementById('logout').classList.remove('hidden');
+                }
+            })
+            .catch(error => {
+                    document.getElementById('Shop').classList.add('hidden');
+                    document.getElementById('Stylist').classList.add('hidden');
+                    document.getElementById('login').classList.remove('hidden');
+                    document.getElementById('Reserve').classList.remove('hidden');
+                    document.getElementById('logout').classList.add('hidden');
+            });
+          };
+window.addEventListener('pageshow', function(event) {
+if (event.persisted) {//your trusty back button catcher
+serveridentity();
+}});
+          serveridentity();
+          setInterval(serveridentity, 300000);
+// Example function to simulate user logout
+function logoutUser() {
+  const cookieName = "SessionKey";
+  document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  // Hide the profile and logout links
+  document.getElementById('Shop').classList.add('hidden');
+  document.getElementById('Stylist').classList.add('hidden');
+  document.getElementById('login').classList.remove('hidden');
+  document.getElementById('logout').classList.add('hidden');
+}
+</script>
+<body>
+    <div class="container">
+        <div class="item">
+            <h3>We're now open to serve you. Walk-in customers are welcome.</h3>
+            <br>
+            <br>
+            <br>
+            <p>Allan Abella</p>
+            <p>Branch Manager of Douche Salon Tungko</p>
+            <br>
+            <p>Contact Number#: 0919-2429690</p>
+            <p>Email Address: abellallan25@yahoo.com</p>
+            <style>
+                  /*This code is specific to the page and would have to overlap the already set rules in css*/
+                .item img {
+                    position: relative;
+                    border: 0px !important;
+                    object-position: center;
+                    top: 350px;
+                    right: 46%;
+                }
+            </style>
+            <a href="AboutPage.html#description" class="image-overlay">
+            <img src="navarrowdown.gif" alt="Description of image" style="width: 110px; height: 50px; position: absolute; bottom: 0;">
+            </a>
+        </div>
+    </div>
+    <div class="container" id="description">
+        <div class="item">
+<h3>Welcome to our salon shop, where we strive to provide a luxurious and relaxing experience for all of our clients. Our team of experienced professionals is dedicated to helping you look and feel your best, whether you're coming in for a quick trim or a full day of pampering.</h3>
+            <br>
+            <h3>offer a wide range of services to meet your needs, including haircuts, color treatments, styling, facials, massages, and more. Our salon features state-of-the-art equipment and high-quality products to ensure that you receive the best possible results.</h3> 
+            <br>
+            <h3>At our salon, we believe that beauty is more than just skin deep. That's why we prioritize not only your physical appearance, but also your overall well-being and self-confidence. Our friendly and attentive staff will work with you to create a personalized experience that leaves you feeling refreshed, revitalized, and confident.</h3> 
+            <br>
+            <h3>Thank you for considering our salon for your beauty needs. We look forward to seeing you soon!</h3>
+        </div>
+    </div>
+  </div>
+  <footer>
+</footer>
+</body>
+</html>

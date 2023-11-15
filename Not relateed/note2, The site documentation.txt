@@ -1,0 +1,34 @@
+documentation,codes.
+
+The code is largely modified website with more emphasis on imagery as the customers or users are more into the site readablity and
+avoid confusions through text. this opens posibilities and simplifications to the view of the site giving it a more
+visually appealing look. as for the more professional look we didintt dive into a more complex views as customers only want one thing
+prior to vising the site, and is the service sceduling.
+
+The codes i split within the navagation bar or the "nav" this is the top view of the user that will guide them to what they wanted
+to see.
+
+the body is another part composing of the main container that is on top of the background that had a darker shade than the original,
+the container also has a inner container that contains the "items", these "items" contain the selectable or viewable parts of the site,
+the roles of "items" is to group the informations together and arrange them so that they would syncronize with the responsive website approach
+
+Another part of the site is the redirector part that redirects the users to different part of the webside or an entirely different
+site altogether, the links and the named ids used to specifically jump the user directly into the item.
+
+//: do not forget
+- User ability to manage data  and deletion of account
+- onsiteload, check login and redirect if false (done)
+
+//: Login
+- Username and Password was given to into one specific JSON altogether
+- Additional information was to be shared like email, name, address within a seperated JSON of their own
+
+//: Sheduling (Stylist)
+Creation of week time table, with seperation of morning and night shift
+Time table stacked sorted with time within date
+
+//: Sheduling (Customer)
+Directed into a popup after booking button to select a week within a week gap before a date, 
+both required to confirmed by the user
+
+//: Optimization of data management if possible options for merging one and regex deletion of entirety	
